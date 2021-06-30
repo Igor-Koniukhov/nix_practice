@@ -1,0 +1,8 @@
+module my-golang-study-project/5_write_to_database_posts
+
+go 1.16
+
+require (
+	github.com/go-sql-driver/mysql v1.6.0
+	github.com/lib/pq v1.10.2
+)
