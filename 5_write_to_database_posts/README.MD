@@ -1,4 +1,4 @@
-6. Работа с БД.
+#6. Работа с БД.
    На JSONPlaceholder есть пользователи, у которых есть посты /posts?userId=7, а у постов есть комментарии
    /comments?postId={postId}. Твоя задача — получить посты для пользователя с id=7 и для каждого полученного
    поста параллельно получить комментарии. Все полученные комментарии записать параллельно в БД.
@@ -9,7 +9,8 @@
     инициировать рутины в другой рутине.
 
 ----------работа с Foreign key-----------
-CREATE TABLE info_posts(userId bigint, id bigint PRIMARY KEY, title longtext, body longtext);
+CREATE TABLE info_posts(userId bigint, id bigint PRIMARY KEY, title longtext,
+ body longtext);
 
 CREATE TABLE comments_info(postId bigint, id bigint, name longtext,
 email longtext, body longtext,

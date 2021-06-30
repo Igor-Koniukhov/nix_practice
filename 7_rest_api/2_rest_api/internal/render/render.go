@@ -3,8 +3,8 @@ package render
 import (
 	"bytes"
 	"fmt"
-	"github.com/Igor-Koniukhov/rest-api/pkg/config"
-	"github.com/Igor-Koniukhov/rest-api/pkg/datastruct"
+	"github.com/Igor-Koniukhov/rest_api/internal/config"
+	"github.com/Igor-Koniukhov/rest_api/internal/datastruct"
 	"html/template"
 	"net/http"
 	"path/filepath"

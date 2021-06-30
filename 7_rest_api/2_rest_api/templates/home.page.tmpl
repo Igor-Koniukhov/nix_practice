@@ -3,10 +3,19 @@
 {{define "content"}}
     <div class="container">
 
-        <h1>Home page </h1>
+        <h1>Posts & Comments page</h1>
+        <p>Golang</p>
+        <p><strong>Task:</strong> </p>
+        <ul>
+            <li style="list-style: none;">Создай CRUD-ы для твоих постов и комментов. </li>
+            <li style="list-style: none;">Ответ от АПИ должен реализовать 2 формата
+                представления данных: XML, JSON.</li>
+            <li style="list-style: none;">Используй стандартный net/http пакет для web сервера.</li>
+
+        </ul>
         <div class="row">
             <div class="col">
-                <form action="/users/post/create/" method="get">
+                <form action="/users/post/write/" method="get">
                     <button class="btn btn-info m-1" name="id" id="id" value="{{.Int}}">Create Post</button>
                 </form>
             </div>
@@ -41,12 +50,18 @@
             <div class="row">
                 <form action="/users/post/" method="get">
                     <button class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">Get post
-                    </button>
+                    </button >
+                </form>
+                <form action="/users/post-json/" method="get">
+                    <button class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">JSON</button >
+                </form>
+                <form action="/users/post-xml/" method="get">
+                    <button class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">XML</button >
                 </form>
                 <form action="/users/post/get/" method="get">
                     <button class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Update</button>
                 </form>
-                <form action="/users/post/comment/" method="get">
+                <form action="/users/post/write/comment/" method="get">
                     <button class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Write comment</button>
                 </form>
                 <form action="/users/post/delete/" method="delete">
@@ -90,6 +105,8 @@
                 <div class="row pl-3">
 
                         <a href="/users/comment/{{.Id}}" class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">Get comment</a>
+                        <a href="/users/comment-json/{{.Id}}" class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">JSON</a>
+                        <a href="/users/comment-xml/{{.Id}}" class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">XML</a>
 
                     <form action="/users/comment/get/" method="get">
                         <button class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Update</button>

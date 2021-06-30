@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"github.com/Igor-Koniukhov/rest-api/dbase"
-	"github.com/Igor-Koniukhov/rest-api/pkg/config"
-	"github.com/Igor-Koniukhov/rest-api/pkg/datastruct"
-	"github.com/Igor-Koniukhov/rest-api/pkg/render"
+	"github.com/Igor-Koniukhov/rest-api/internal/config"
+	"github.com/Igor-Koniukhov/rest-api/internal/datastruct"
+	"github.com/Igor-Koniukhov/rest-api/internal/render"
 	"net/http"
 	"strconv"
 	"strings"
@@ -19,24 +21,27 @@ var (
 	DataArr    []dbase.HomePageStruct
 	wg         sync.WaitGroup
 	err        error
+
+	//Repo the repository used by the handlers
 	Repo       *Repository
 	userNumber = 7
 )
-
+//Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
 }
-
+// NewRepo creates a new repository
 func NewRepo(a *config.AppConfig) *Repository {
 	return &Repository{
 		App: a,
 	}
 }
-
+// NewHandlers sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
 }
 
+//newData allows access to actual data of posts and comments
 func newData(ds []dbase.HomePageStruct, d dbase.HomePageStruct) {
 	DataArr = ds
 	DataStruct = d
@@ -73,7 +78,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (m *Repository) GetPost(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) GetPostJSON(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	var post dbase.PostInfo
 
@@ -87,7 +92,35 @@ func (m *Repository) GetPost(w http.ResponseWriter, r *http.Request) {
 		&post.Body)
 	dbase.CheckError(err)
 
-	render.RenderTemplate(w, "post.page.tmpl", datastruct.Data{Post: post,})
+	json, err := json.MarshalIndent(post, "", "   ")
+	dbase.CheckError(err)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json)
+
+
+
+}
+func (m *Repository) GetPostXML(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
+	var post dbase.PostInfo
+
+	sqlStmt := fmt.Sprintf("SELECT * FROM %s WHERE id=%v", dbase.PostTb, id)
+	row := dbase.Db.QueryRow(sqlStmt)
+
+	err := row.Scan(
+		&post.UserId,
+		&post.Id,
+		&post.Title,
+		&post.Body)
+	dbase.CheckError(err)
+	xml, err := xml.MarshalIndent(post, "", "   ")
+	dbase.CheckError(err)
+
+	w.Header().Set("Content-Type", "application/xml")
+	w.Write(xml)
+
+
 
 }
 
@@ -176,8 +209,9 @@ func delete(table, name string, id int) {
 	_, err := dbase.Db.Exec(sqlStmt2)
 	dbase.CheckError(err)
 }
-
-func (m *Repository) GetComment(w http.ResponseWriter, r *http.Request) {
+// In the Handlers used two different approaches to get sours from URL only with experiment goal
+//(compare get posts and comments)
+func (m *Repository) GetCommentJSON(w http.ResponseWriter, r *http.Request) {
 	fields := strings.Split(r.URL.String(), "/")
 	id := fields[len(fields)-1]
 	var comment dbase.CommentInfo
@@ -192,9 +226,36 @@ func (m *Repository) GetComment(w http.ResponseWriter, r *http.Request) {
 		&comment.Body)
 	dbase.CheckError(err)
 
-	render.RenderTemplate(w, "comment.page.tmpl", datastruct.Data{Comment: comment,})
+	json, err := json.MarshalIndent(comment, "", "   ")
+	dbase.CheckError(err)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json)
 
 }
+
+func (m *Repository) GetCommentXML(w http.ResponseWriter, r *http.Request) {
+	var comment dbase.CommentInfo
+	fields := strings.Split(r.URL.String(), "/")
+	id := fields[len(fields)-1]
+	sqlStmt := fmt.Sprintf("SELECT * FROM %s WHERE id=%v", dbase.CommentTb, id)
+	row := dbase.Db.QueryRow(sqlStmt)
+	err := row.Scan(
+		&comment.PostId,
+		&comment.Id,
+		&comment.Name,
+		&comment.Email,
+		&comment.Body)
+	dbase.CheckError(err)
+
+	xml, err := xml.MarshalIndent(comment, "", "   ")
+	dbase.CheckError(err)
+	w.Header().Set("Content-Type", "application/xml")
+
+	w.Write(xml)
+
+}
+
 func (m *Repository) GetForUpdateComment(w http.ResponseWriter, r *http.Request) {
 	var comment dbase.CommentInfo
 	id := r.FormValue("id")
