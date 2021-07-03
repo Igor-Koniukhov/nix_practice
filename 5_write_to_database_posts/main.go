@@ -33,9 +33,6 @@ func init() { // **added for PostgreSQL**
 	}
 }
 
-
-
-
 func main() {
 
 	db, err = sql.Open(dbu.DbDriver, dbu.DataSourceName)

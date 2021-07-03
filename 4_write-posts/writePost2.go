@@ -50,7 +50,5 @@ func main() {
 	}
 	_ = os.WriteFile("json.txt", p, 666)
 
-
-
 }
 

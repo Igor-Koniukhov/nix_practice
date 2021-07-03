@@ -20,6 +20,7 @@ func main() {
 	for i := 1; i <= 10; i++ {
 		wgs.Add(1)
 		go getPosts(url, conn, err, i)
+
 	}
 	wgs.Wait()
 
@@ -35,6 +36,7 @@ func getPosts(url string, conn *http.Response, err error, i int) {
 		dataPost, err := io.Copy(os.Stdout, conn.Body)
 		checkErr(err)
 		fmt.Println(dataPost)
+		
 	}
 }
 

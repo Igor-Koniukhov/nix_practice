@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -20,7 +19,9 @@ func main() {
 
 	_ = os.MkdirAll(filePath, 666)
 	conn, err := http.Get(url)
-	checkErr(err)
+	if err !=nil {
+		fmt.Println(err)
+	}
 
 	defer conn.Body.Close()
 
@@ -34,7 +35,9 @@ func main() {
 func fileCreator(filePath string, n *int) {
 	for i := 1; i <= *n; i++ {
 		_,err := os.Create(filePath + strconv.Itoa(i) + ".txt")
-		checkErr(err)
+		if err !=nil {
+			fmt.Println(err)
+		}
 	}
 	waitG.Done()
 
@@ -43,11 +46,17 @@ func fileCreator(filePath string, n *int) {
 func fileWriter(url string, err error, conn *http.Response, filePath string, n *int) {
 	for i := 1; i <= *n; i++ {
 		urlComment := fmt.Sprintf("%s%d", url, i)
-		checkErr(err)
+		if err !=nil {
+			fmt.Println(err)
+		}
 		conn, err = http.Get(urlComment)
-		checkErr(err)
+		if err !=nil {
+			fmt.Println(err)
+		}
 		fl, err := os.OpenFile(filePath+strconv.Itoa(i)+".txt", os.O_RDWR, 666)
-		checkErr(err)
+		if err !=nil {
+			fmt.Println(err)
+		}
 		_, _ = io.Copy(fl, conn.Body)
 	}
 	waitG.Done()
@@ -55,8 +64,4 @@ func fileWriter(url string, err error, conn *http.Response, filePath string, n *
 
 
 
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-}
+

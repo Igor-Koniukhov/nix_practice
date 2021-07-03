@@ -62,9 +62,7 @@ func main(){
 	http.HandleFunc("/users/comment/", handlers.Repo.GetComment)
 	http.HandleFunc("/users/comment-json/", handlers.Repo.GetCommentJSON)
 	http.HandleFunc("/users/comment-xml/", handlers.Repo.GetCommentXML)
-	http.HandleFunc("/users/comment/get/", handlers.Repo.GetForUpdateComment)
-	http.HandleFunc("/users/comment/update/", handlers.Repo.UpdateComment)
-	http.HandleFunc("/users/comment/delete/", handlers.Repo.DeleteComment)
+
 
 	fileServe := http.FileServer(http.Dir("./static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServe))

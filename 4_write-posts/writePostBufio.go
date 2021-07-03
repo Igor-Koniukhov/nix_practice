@@ -1,10 +1,10 @@
 package main
 
-
 import (
 	"bufio"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -12,7 +12,7 @@ import (
 func main() {
 	url := "https://jsonplaceholder.typicode.com/posts/"
 	conn, err := http.Get(url)
-	checkErr(err)
+	CheckErr(err)
 
 	defer conn.Body.Close()
 
@@ -32,12 +32,12 @@ func main() {
 
 		fv = fmt.Sprintf("%s%v.txt", path, i)
 		file, err = os.OpenFile(fv, os.O_CREATE|os.O_WRONLY, 0666)
-		checkErr(err)
+		CheckErr(err)
 		bufferedWriter = bufio.NewWriter(file)
 
 		url := fmt.Sprintf("%s%v", url, i)
 		conn, err = http.Get(url)
-		checkErr(err)
+		CheckErr(err)
 
 		_, _ = io.Copy(bufferedWriter, conn.Body)
 		_, _ = bufferedWriter.WriteString("\nBe careful: bufio in work! \n\n")
@@ -47,4 +47,9 @@ func main() {
 	// Write memory buffer to disk
 	_ = bufferedWriter.Flush()
 
+}
+func CheckErr(err error) {
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }

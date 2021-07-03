@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>REST API Echo</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="/users/post/write/" method="get">
+                <button class="btn btn-info m-1" name="id" id="id" value="{{.Int}}">Create Post</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{range .StructHomePage}}
+                <h2 class="text-center">Post {{.Id}}</h2>
+                <div class="row mb-2 text-center pl-2 pr-2">
+                    <div class="col-md-1 col-sm-4 bordered ">
+                        <div class="bgc-g">userId</div>
+                        <hr>
+                        <div>{{.UserId}}</div>
+                    </div>
+                    <div class="col-md-1 col-sm-4 bordered">
+                        <div class="bgc-g">id</div>
+                        <hr>
+                        <div>{{.Id}}</div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 bordered">
+                        <div class="bgc-g">title</div>
+                        <hr>
+                        <div>{{.Title}}</div>
+                    </div>
+                    <div class=" col-md-6 col-sm-12 bordered">
+                        <div class="bgc-g">body</div>
+                        <hr>
+                        <div>{{.Body}}</div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <form action="/users/post-json/" method="get">
+                        <button class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">JSON</button>
+                    </form>
+                    <form action="/users/post-xml/" method="get">
+                        <button class="btn btn-success m-1" name="id" id="id" value="{{.Id}}">XML</button>
+                    </form>
+                    <form action="/users/post/get/" method="get">
+                        <button class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Update</button>
+                    </form>
+                    <form action="/users/post/comment/" method="get">
+                        <button class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Write comment</button>
+                    </form>
+                   <form action="/users/"  method="get" >
+                        <button type="submit" class="btn btn-danger m-1" name="id" id="id" value="{{.Id}}">Delete Post {{.Id}}</button>
+                    </form>
+
+                </div>
+                {{range .Comments}}
+                    <h3>Comment {{.Id}}</h3>
+                    <div class="row mb-2 text-center pl-2 pr-2">
+                        <div class="col-md-1 col-sm-2 bordered ">
+                            <div class="bgc-g">postId</div>
+                            <hr>
+                            <div>{{.PostId}}</div>
+                        </div>
+                        <div class="col-md-1 col-sm-2 bordered">
+                            <div class="bgc-g">id</div>
+                            <hr>
+                            <div>{{.Id}}</div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 bordered">
+                            <div class="bgc-g">name</div>
+                            <hr>
+                            <div>{{.Name}}</div>
+                        </div>
+                        <div class="col-md-2 col-sm-4 bordered">
+                            <div class="bgc-g">email</div>
+                            <hr>
+                            <div>{{.Email}}</div>
+                        </div>
+
+                        <div class=" col-md-6 col-sm-12 bordered">
+                            <div class="bgc-g">body</div>
+                            <hr>
+                            <div>{{.Body}}</div>
+                        </div>
+                    </div>
+
+                    <div class="row pl-3">
+                        <!-- In the Handlers used two different approaches to get sours from URL only with experiment goal
+                         (compare get posts and comments)-->
+                        <a href="/users/comment-json/{{.Id}}" class="btn btn-success m-1" name="id" id="id"
+                           value="{{.Id}}">JSON</a>
+                        <a href="/users/comment-xml/{{.Id}}" class="btn btn-success m-1" name="id" id="id"
+                           value="{{.Id}}">XML</a>
+
+                        <form action="/users/comment/get/" method="get">
+                            <button type="submit" class="btn btn-info m-1" name="id" id="id" value="{{.Id}}">Update</button>
+                        </form>
+                        <form action="/users/comment/delete/" method="get">
+                            <button type="submit" class="btn btn-danger m-1" name="id" id="id" value="{{.Id}}">Delete Comment {{.Id}}</button>
+                        </form>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+
+    </div>
+    <p></p>
+
+</div>
+
+</body>
+</html>

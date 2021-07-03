@@ -30,8 +30,8 @@ type InfoComments struct {
 var err error
 var DbDriver      = "mysql"
 const (
-	DBMode        = "postgres"
-
+	//DBMode        = "postgres"
+	DBMode        = "mysql"
 	User          = "root"
 	Password      = "passwordIK"
 	DbName        = "db_user_7"
