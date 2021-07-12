@@ -6,29 +6,21 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type PostInfo struct {
-	UserId int    `json:"userId"`
-	Id     int    `json:"id"`
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-}
-type CommentInfo struct {
-	PostId int    `json:"post_id"`
-	Id     int    `json:"id"`
-	Name   string `json:"name"`
-	Email  string `json:"email"`
-	Body   string `json:"body"`
-}
 
-type HomePageStruct struct {
-	UserId   int    `json:"userId"`
-	Id       int    `json:"id"`
-	Title    string `json:"title"`
-	Body     string `json:"body"`
-	Comments []CommentInfo
-}
 
-var Db *sql.DB
+var db *sql.DB
+var err error
+
+func ConnectDB() *sql.DB  {
+	db, err = sql.Open(Driver, DbSN)
+	if err == nil {
+		fmt.Println("Success! DB connected on port:", PortDB)
+	} else {
+		fmt.Println(err)
+	}
+
+	return db
+}
 
 const (
 	DBName    = "db_user_7"
