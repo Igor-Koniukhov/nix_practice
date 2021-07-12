@@ -23,6 +23,7 @@ func main(){
 	}else{
 		fmt.Println(err)
 	}
+	defer dbase.Db.Close()
 
 
 	tc, err := render.CreateTemplateCache()
